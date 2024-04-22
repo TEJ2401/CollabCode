@@ -50,7 +50,7 @@ function getAllConnectedClients(roomId) {
 
 async function connectToDatabase() {
     try {
-        await mongoose.connect('mongodb+srv://smitpadshala99:<password>@cluster0.ootkrdm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+        await mongoose.connect('mongodb+srv://smitpadshala99:<password>b@cluster0.ootkrdm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
