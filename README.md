@@ -25,8 +25,18 @@ Are you tired of sending code snippets back and forth, struggling to debug and c
 - React-Toastify
 
 ## Installation
--npm install
--To run frontend-
+
+### Prerequisites
+- Node.js and npm installed on your machine
+
+### Steps
+1. Clone the repository
+2. Navigate to the project directory
+3. Install dependencies
+4. **To run the frontend:** npm start
+5. **To run the backend:** node server.js
+6. Open your web browser and go to `http://localhost:3000` to access the Collab Code Hub application.
+
 
 
 
