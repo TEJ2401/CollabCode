@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Collab Code Hub: Realtime Collaborative Code Editor
 
 ## Introduction
@@ -37,3 +38,8 @@ Are you tired of sending code snippets back and forth, struggling to debug and c
 4. [x] Add support to accept or reject new users trying to join the room
 5. [ ] Add to implement video and voice chat feature inside the editor
 6. [ ] Add support for local code file uploading
+=======
+# CollabCode
+A Collaborative Coding Environment
+>>>>>>> 6a67c95840e75d7bd26c4714b090a089baa78547
+# CollabCode
