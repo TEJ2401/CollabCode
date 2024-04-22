@@ -36,10 +36,9 @@ Are you tired of sending code snippets back and forth, struggling to debug and c
 2. [x] Added support for multiple themes
 3. [x] Added support for saving the last theme and language selected by the user in local storage
 4. [x] Add support to accept or reject new users trying to join the room
-5. [ ] Add to implement video and voice chat feature inside the editor
-6. [ ] Add support for local code file uploading
-=======
-# CollabCode
-A Collaborative Coding Environment
+5. [x] Add to implement video and voice chat feature inside the editor
+6. [x] Add support for local code file uploading
+
+
 
 
