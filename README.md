@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Collab Code Hub: Realtime Collaborative Code Editor
 
 ## Introduction
@@ -9,7 +9,6 @@ Are you tired of sending code snippets back and forth, struggling to debug and c
 
 - Multiple users can join a room and edit code together
 - Changes are reflected in real time
-- Supports syntax highlighting for different programming languages
 - Users can choose theme based on their preferences
 - Users can leave the room and rejoin later to continue editing
 - Copy button to copy the room id to clipboard
@@ -26,9 +25,10 @@ Are you tired of sending code snippets back and forth, struggling to debug and c
 - React-Toastify
 
 ## Installation
+-npm install
+-To run frontend-
 
 
-## Project Video
 
 ## Future Scope
 
@@ -41,5 +41,5 @@ Are you tired of sending code snippets back and forth, struggling to debug and c
 =======
 # CollabCode
 A Collaborative Coding Environment
->>>>>>> 6a67c95840e75d7bd26c4714b090a089baa78547
-# CollabCode
+
+
