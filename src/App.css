@@ -1,0 +1,558 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+@import url('https://fonts.cdnfonts.com/css/cascadia-code');
+
+:root {
+    --copy-text: black;
+    --copy-color: #0096FF;
+    --copy-hover-color: #87CEEB;
+    --create-color: #0096FF;
+    --create-hover-color: #87CEEB;
+    --join-color: #87CEEB;
+    --join-hover-color: #0096FF;
+    --leave-color: #e57063f8;
+    --leave-hover-color: #f77a6c;
+}
+
+body {
+    font-family: Inter, system-ui, -apple-system;
+    font-weight: 500;
+}
+
+.homePageWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    height: 100vh;
+}
+
+.formWrapper {
+    background: #282a36;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+}
+
+footer a {
+    color: var(--create-hover-color);
+}
+
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.mainLabel {
+    margin-bottom: 20px;
+    margin-top: 0;
+    text-align: center;
+}
+
+.homePageLogo {
+    height: 150px;
+    margin-bottom: 20px;
+}
+
+.inputBox {
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    margin-bottom: 14px;
+    background: #eee;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn {
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.copyBtn {
+    background-color: var(--copy-color);
+    color: white;
+}
+
+.copyBtn:hover {
+    background-color: var(--create-color);
+    color: var(--copy-text);
+}
+
+.joinBtn {
+    background: var(--join-color);
+    width: 100px;
+    margin-left: auto;
+}
+
+.joinBtn:hover {
+    background: var(--join-hover-color);
+    color: white;
+}
+
+.leaveBtn {
+    background: var(--leave-color);
+    font-weight: bold;
+    color: white;
+}
+
+.leaveBtn:hover {
+    background: var(--leave-color);
+    color: var(--copy-text);
+    transition: all 0.2s ease-in-out;
+}
+
+.createInfo {
+    margin: 0 auto;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.createNewBtn {
+    color: #e57063f8;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    font-weight: 500 !important;
+}
+
+.createNewBtn:hover {
+    color: #f77a6c;
+    border-color: black;
+    font-size: 17px;
+    text-decoration: underline;
+}
+
+footer a:hover {
+    color: var(--create-color);
+}
+
+.mainWrap {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    height: 100vh;
+    overflow: hidden;
+    
+}
+
+@media screen and (min-width: 480px) {
+    .mainWrap {
+        display: flex;
+        /* grid-template-columns: 400px 1fr; */
+        height: 100vh;
+        flex-direction: row ;
+    }
+}
+
+.aside {
+    background: #1c1e29;
+    padding: 16px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-width:250px;
+    overflow-y: auto;
+}
+
+.asideInner {
+    flex: 1;
+}
+
+.clientsList {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.client {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-weight: bold;
+}
+
+.userName {
+    margin-top: 10px;
+}
+
+.logo {
+    border-bottom: 1px solid #424242;
+    padding-bottom: 7px;
+}
+
+.logoImage {
+    height: 80px;
+}
+
+.seLang {
+    border: none;
+    width: 100%;
+    margin-top: 4px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align-last: center;
+}
+
+.leaveBtn {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.CodeMirror {
+    font-family: 'Cascadia Code', sans-serif !important;
+    min-height: calc(100vh - 20px);
+    width: calc(100vw - 180px);
+    font-size: 16px;
+    line-height: 1.6;
+    padding-top: 20px;
+}
+
+@media screen and (min-width: 480px) {
+    .CodeMirror {
+        min-height: calc(100vh - 20px);
+        width: calc(100vw - 230px);
+        font-size: 16px;
+        line-height: 1.6;
+        padding-top: 20px;
+        background-color: black;
+    }
+}
+.editorWrap {
+    display: flex;
+    flex-direction: row; /* Arrange items in a row */
+    height: 100vh;
+}
+
+.CodeMirror {
+    font-family: 'Cascadia Code', sans-serif !important;
+    min-height: calc(100vh - 20px);
+    width: 800px; /* Adjust width for the code editor */
+    font-size: 16px;
+    line-height: 1.6;
+    padding-top: 20px;
+    background-color: black;
+}
+
+.outputContainer {
+    min-height: calc(100vh - 20px);
+    width: 1000px; /* Adjust width for the output window */
+    padding-top: 20px;
+    border-left: 1px solid white; /* Add a border between code editor and output */
+    display: flex;
+    flex-direction: column;
+}
+
+.outputContent {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #1c1e29; /* Adjust background color as needed */
+    color: white; /* Adjust text color as needed */
+}
+.newEditor{
+    display: flex;
+    flex-direction: row;
+}
+.flexboth{
+    display: flex;
+    flex-direction: column;
+}
+.playbuttonwidth{
+    width: 70px;
+    border-radius: 10px;
+    background-color: '#4CAF50';
+    color:#4CAF50 ;
+    display: 'inline-block';
+    cursor: 'pointer'; 
+    border-radius: '4px';
+    box-shadow: '0 2px 5px rgba(0, 0, 0, 0.2)'; 
+    
+}
+/* .buttonContainer{
+    display: flex;
+    flex-direction: row;
+} */
+.buttonflex{
+    display: flex;
+    flex-direction: row;
+    align-items:right;
+}
+.chat-box-container {
+    position: fixed;
+    bottom: 10px;
+    height: 400px;
+    right: 20px;
+    width: 250px;
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+    z-index: 9999;
+  }
+  .activetabSidebar{
+    display: flex;
+    direction: row;
+  }
+  .sidebar {
+    background: #1c1e29;
+    padding: 16px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    width: 140px; /* Adjust width as needed */
+}
+
+.sidebarItem {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.sidebarItem:hover {
+    background-color: #444;
+}
+
+.sidebarItem span {
+    margin-left: 10px;
+}
+.chatbox-container {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 350px;
+    height: auto;
+  }
+  
+  .chatbox-header {
+    background-color: blue;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    height: 30px;
+    width: 330px;
+    cursor:pointer ;
+    
+  }
+  
+  .chatbox-icons {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .chatbox-messages {
+    min-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: white;
+  }
+  
+  .message {
+    margin-bottom: 10px;
+  }
+  
+  .message-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    background-color:blanchedalmond;
+  }
+  
+  .username {
+    font-weight: bold;
+  }
+
+  .chatbox-container {
+    transition: transform 0.3s ease;
+  }
+  
+  .chatbox-container.closed {
+    transform: translateX(70%);
+  }
+  
+  
+  .timestamp {
+    color: #999;
+    font-size: 0.8rem;
+  }
+  
+  .message-content {
+    background-color: aquamarine;
+    border-radius: 10px;
+    padding: 8px;
+    
+  }
+  
+  .chatbox-input {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .chatbox-input input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .chatbox-input button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+  .outputWindowResizable {
+    position: relative;
+    background-color: #f0f0f0;
+    overflow: auto;
+  }
+  
+  .outputWindowResizable .react-resizable-handle {
+    position: absolute;
+    background-color: #ccc;
+    width: 10px;
+    height: 100%;
+    right: -5px;
+    cursor: col-resize;
+    z-index: 1;
+  }
+  
+  .outputWindowResizable .react-resizable-handle:hover {
+    background-color: #bbb;
+  }
+  /* Editor.css */
+.newEditor {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .CodeMirror {
+    font-family: 'Cascadia Code', sans-serif !important;
+    min-height: calc(100vh - 20px);
+    width: 800px; /* Adjust width for the code editor */
+    font-size: 16px;
+    line-height: 1.6;
+    padding-top: 20px;
+    background-color: black;
+  }
+  
+  .outputContainer {
+    min-height: calc(100vh - 20px);
+    width: 1000px; /* Adjust width for the output window */
+    padding-top: 20px;
+    border-left: 1px solid white; /* Add a border between code editor and output */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .outputWindowResizable {
+    position: relative;
+    background-color: #f0f0f0;
+    overflow: auto;
+  }
+  
+  .outputWindowResizable .react-resizable-handle {
+    position: absolute;
+    background-color: #ccc;
+    width: 10px;
+    height: 100%;
+    right: -5px;
+    cursor: col-resize;
+    z-index: 1;
+  }
+  
+  .outputWindowResizable .react-resizable-handle:hover {
+    background-color: #bbb;
+  }
+  /* Editor container */
+.editor-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* Editor section */
+  .editor {
+    position: relative;
+    width: 50%; /* Adjust the width as needed */
+    overflow: hidden;
+  }
+  
+  /* Output window section */
+  .output-window {
+    position: relative;
+    width: 50%; /* Adjust the width as needed */
+    overflow: auto;
+  }
+  
+  /* Play button */
+  .play-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  
+  /* Dark mode toggle button */
+  .dark-mode-toggle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+  .chatbox-messages {
+    min-height: 400px;
+    max-height: 400px; /* Set a maximum height to enable scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 10px;
+    background-color: white;
+  }
+  
+  .message {
+    margin-bottom: 10px;
+    padding: 10px; /* Add padding for better readability */
+    border-radius: 8px; /* Add border radius to style the messages */
+    background-color: #f0f0f0; /* Set background color for messages */
+  }
+  
+  .message-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  
+  .username {
+    font-weight: bold;
+  }
+  
+  .timestamp {
+    color: #999;
+    font-size: 0.8rem;
+  }
+  
+  .message-content {
+    padding: 5px; /* Add padding to message content */
+  }
+  
+  

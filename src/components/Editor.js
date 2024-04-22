@@ -1,0 +1,353 @@
+import React, { useEffect, useRef } from "react";
+import { language, cmtheme } from "../../src/atoms";
+import { useRecoilValue } from "recoil";
+import ACTIONS from "../actions/Actions";
+import executeCode from "../Api/Api";
+// CODE MIRROR
+import { RiSunLine, RiMoonLine } from "react-icons/ri";
+import Codemirror from "codemirror";
+import "codemirror/lib/codemirror.css";
+// import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// theme
+import { Resizable } from 'react-resizable';
+
+import OutputWindow from "./OutputWindow";
+import "codemirror/theme/3024-day.css";
+import "codemirror/theme/3024-night.css";
+import "codemirror/theme/abbott.css";
+import "codemirror/theme/abcdef.css";
+import "codemirror/theme/ambiance.css";
+import "codemirror/theme/ayu-dark.css";
+import "codemirror/theme/ayu-mirage.css";
+import "codemirror/theme/base16-dark.css";
+import "codemirror/theme/base16-light.css";
+import "codemirror/theme/bespin.css";
+import "codemirror/theme/blackboard.css";
+import "codemirror/theme/cobalt.css";
+import "codemirror/theme/colorforth.css";
+import "codemirror/theme/darcula.css";
+import "codemirror/theme/dracula.css";
+import "codemirror/theme/duotone-dark.css";
+import "codemirror/theme/duotone-light.css";
+import "codemirror/theme/eclipse.css";
+import "codemirror/theme/elegant.css";
+import "codemirror/theme/erlang-dark.css";
+import "codemirror/theme/gruvbox-dark.css";
+import "codemirror/theme/hopscotch.css";
+import "codemirror/theme/icecoder.css";
+import "codemirror/theme/idea.css";
+import "codemirror/theme/isotope.css";
+import "codemirror/theme/juejin.css";
+import "codemirror/theme/lesser-dark.css";
+import "codemirror/theme/liquibyte.css";
+import "codemirror/theme/lucario.css";
+import "codemirror/theme/material.css";
+import "codemirror/theme/material-darker.css";
+import "codemirror/theme/material-palenight.css";
+import "codemirror/theme/material-ocean.css";
+import "codemirror/theme/mbo.css";
+import "codemirror/theme/mdn-like.css";
+import "codemirror/theme/midnight.css";
+import "codemirror/theme/monokai.css";
+import "codemirror/theme/moxer.css";
+import "codemirror/theme/neat.css";
+import "codemirror/theme/neo.css";
+import "codemirror/theme/night.css";
+import "codemirror/theme/nord.css";
+import "codemirror/theme/oceanic-next.css";
+import "codemirror/theme/panda-syntax.css";
+import "codemirror/theme/paraiso-dark.css";
+import "codemirror/theme/paraiso-light.css";
+import "codemirror/theme/pastel-on-dark.css";
+import "codemirror/theme/railscasts.css";
+import "codemirror/theme/rubyblue.css";
+import "codemirror/theme/seti.css";
+import "codemirror/theme/shadowfox.css";
+import "codemirror/theme/solarized.css";
+import "codemirror/theme/the-matrix.css";
+import "codemirror/theme/tomorrow-night-bright.css";
+import "codemirror/theme/tomorrow-night-eighties.css";
+import "codemirror/theme/ttcn.css";
+import "codemirror/theme/twilight.css";
+import "codemirror/theme/vibrant-ink.css";
+import "codemirror/theme/xq-dark.css";
+import "codemirror/theme/xq-light.css";
+import "codemirror/theme/yeti.css";
+import "codemirror/theme/yonce.css";
+import "codemirror/theme/zenburn.css";
+import { RiStopFill } from "react-icons/ri";
+// modes
+import "codemirror/mode/clike/clike";
+import "codemirror/mode/css/css";
+import "codemirror/mode/dart/dart";
+import "codemirror/mode/django/django";
+import "codemirror/mode/dockerfile/dockerfile";
+import "codemirror/mode/go/go";
+import "codemirror/mode/htmlmixed/htmlmixed";
+import "codemirror/mode/javascript/javascript";
+import "codemirror/mode/jsx/jsx";
+import "codemirror/mode/markdown/markdown";
+import "codemirror/mode/php/php";
+import "codemirror/mode/python/python";
+import "codemirror/mode/r/r";
+import "codemirror/mode/rust/rust";
+import "codemirror/mode/ruby/ruby";
+import "codemirror/mode/sass/sass";
+import "codemirror/mode/shell/shell";
+import "codemirror/mode/sql/sql";
+import "codemirror/mode/swift/swift";
+import "codemirror/mode/xml/xml";
+import "codemirror/mode/yaml/yaml";
+
+// features
+import "codemirror/addon/edit/closetag";
+import "codemirror/addon/edit/closebrackets";
+import "codemirror/addon/scroll/simplescrollbars.css";
+
+//search
+import "codemirror/addon/search/search.js";
+import "codemirror/addon/search/searchcursor.js";
+import "codemirror/addon/search/jump-to-line.js";
+import "codemirror/addon/dialog/dialog.js";
+import "codemirror/addon/dialog/dialog.css";
+import { useState } from "react";
+// import { executeCode } from '../Api/Api';
+import { RiPlayFill } from "react-icons/ri";
+import { Output } from "@mui/icons-material";
+const Editor = ({ socketRef, roomId, onCodeChange,onOutputChange,outputr,language,theme }) => {
+  const [output, setOutput] = useState("");
+  const editorRef = useRef(null);
+  const OutputRef=useRef(null);
+  const [editorWidth, setEditorWidth] = useState(800); // Initial width of the editor
+  const [outputWidth, setOutputWidth] = useState(400); // Initial width of the output window
+  // const lang = useRecoilValue(language);
+   const outputref=useRef()
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [code, setCode] = useState("");
+  const toggleDarkMode = () => {
+    setIsDarkMode((prev) => !prev); // Toggle the state when button is clicked
+    const newTheme = isDarkMode ? "white" : "material"; // Example: Toggle between 'default' and 'material' themes
+    editorRef.current.setOption("theme", newTheme); // Set new theme for CodeMirror
+  };
+  
+  // const runCode = async () => {
+  //   const sourceCode = editorRef.current.getValue();
+  //   console.log(sourceCode);
+  //   if (!sourceCode) return;
+  
+  //   // Check if there are any input statements in the code
+  //   const inputLineIndices = sourceCode.split('\n').reduce((acc, line, index) => {
+  //     if (line.includes('input()')) {
+  //       acc.push(index);
+  //     }
+  //     return acc;
+  //   }, []);
+  
+  //   if (inputLineIndices.length > 0) {
+  //     // Prompt the user for input
+  //     const userInput = prompt("Enter input for all variables (comma-separated):");
+  
+  //     // Split the user input by commas
+  //     const inputValues = userInput.split(',');
+  
+  //     // Process each input line
+  //     inputLineIndices.forEach((inputLineIndex, index) => {
+  //       // Extract the variable name from the input line
+  //       const lines = sourceCode.split('\n');
+  //       const inputLine = lines[inputLineIndex];
+  //       const equalsIndex = inputLine.indexOf('=');
+  //       const variableName = inputLine.substring(0, equalsIndex).trim();
+        
+  //       // Simulate user input for each input line
+  //       const userInputValue = inputValues[index].trim();
+  
+  //       // Replace the entire line with the assignment statement
+  //       lines[inputLineIndex] = `${variableName} = "${userInputValue}";`;
+  //       sourceCode = lines.join('\n');
+  //     });
+  //   }
+  
+  //   // Execute the code
+  //   const { run: result } = await executeCode(language, sourceCode);
+  
+  //   // Emit output change through socket and update state
+  //   console.log(result.output);
+  //   socketRef.current.emit('outputChange', { output: result.output });
+  //   onOutputChange(result.output);
+  //   setOutput(result.output);
+  // };
+  
+  const runCode = async () => {
+    const sourceCode = editorRef.current.getValue();
+    console.log(sourceCode);
+    if (!sourceCode) return;
+
+    let modifiedCode = 0; // Initialize userInput with existing input
+    // Check if there are any input statements in the code
+    const lines = sourceCode.split('\n');
+    const inputLineIndex = lines.findIndex(line => line.includes('input()'));
+    if (inputLineIndex !== -1) {
+      // Extract the variable name from the input line
+      const inputLineIndices = sourceCode.split('\n').reduce((acc, line, index) => {
+        if (line.includes('input()')) {
+          acc.push(index);
+        }
+        return acc;
+      }, []);
+      const lines = sourceCode.split('\n');
+      const userInput = prompt("Enter input for all variables (comma-separated):");
+
+// Split the user input by commas
+      const inputValues = userInput.split(',');
+      inputLineIndices.forEach((inputLineIndex,index) => {
+        // Extract the variable name from the input line
+        const inputLine = lines[inputLineIndex];
+        const equalsIndex = inputLine.indexOf('=');
+        const variableName = inputLine.substring(0, equalsIndex).trim();
+      
+        // Simulate user input for each input line
+        const userInputValue = inputValues[index].trim();
+
+  // Replace the entire line with the assignment statement
+        lines[inputLineIndex] = `${variableName} = "${userInputValue}";`;
+
+        });
+      const modifiedCode = lines.join('\n');
+  
+      // Simulate user input
+      
+      const { run: result } = await executeCode(language, modifiedCode);
+      console.log(result.output);
+      socketRef.current.emit('outputChange', { output:result.output });
+      onOutputChange(result.output)
+    // outputref.current=result.output;
+    // console.log(outputref.current)
+      setOutput(result.output);
+  
+      console.log(modifiedCode);
+  } else {
+      console.log("No input() statement found.");
+      const { run: result } = await executeCode(language, sourceCode);
+      console.log(result.output);
+      socketRef.current.emit('outputChange', { output:result.output });
+      onOutputChange(result.output)
+      // outputref.current=result.output;
+      // console.log(outputref.current)
+      setOutput(result.output);
+  }
+  
+    
+  };
+
+  const initEditor = () => {
+    editorRef.current = Codemirror.fromTextArea(
+      document.getElementById("realtimeEditor"),
+      {
+        mode: { name: language },
+        theme: theme,
+        autoCloseTags: true,
+        autoCloseBrackets: true,
+        lineNumbers: true,
+      }
+    );
+
+    editorRef.current.on("change", (instance, changes) => {
+      const { origin } = changes;
+      const newCode = instance.getValue();
+      setCode(newCode); // Update the code state
+      onCodeChange(newCode);
+      if (origin !== "setValue") {
+        socketRef.current.emit(ACTIONS.CODE_CHANGE, {
+          roomId,
+          code: newCode,
+        });
+      }
+    });
+  };
+  useEffect(() => {
+    initEditor();
+  }, []);
+  useEffect(() => {
+    // Save the current code content
+    const currentCode = editorRef.current ? editorRef.current.getValue() : "";
+    
+    // Dispose of the previous editor instance
+    if (editorRef.current) {
+      editorRef.current.toTextArea();
+    }
+
+    // Re-initialize the editor with the new language
+    initEditor();
+
+    // Restore the saved code content
+    if (currentCode) {
+      editorRef.current.setValue(currentCode);
+    }
+  }, [language, theme]);
+
+
+  useEffect(() => {
+    if (socketRef.current) {
+      socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
+        if (code !== null) {
+          editorRef.current.setValue(code);
+        }
+      });
+      socketRef.current.on('outputChange', ({ output }) => {
+       setOutput(output)
+        
+    });
+    socketRef.current.on("op",({Output})=>{
+      setOutput(Output)
+     })
+
+    }
+
+    return () => {};
+  }, );
+
+  return (
+    <>
+      <div className="newEditor">
+        <div className="buttonContainer">
+          <div className="buttonflex">
+            {/* <button className='playbuttonwidth' onClick={runCode}><FaPlay/></button>
+        <button className='playbuttonwidth' onClick={toggleDarkMode} > {!isDarkMode ? <RiSunLine /> : <RiMoonLine />}</button> */}
+          </div>
+          <textarea
+            id="realtimeEditor"
+            value={code}
+          ></textarea>
+          <button
+            onClick={runCode}
+            className="playbuttonwidth"
+            style={{ position: "absolute", top: "5px", left: "1150px" }}
+          >
+            {/* <button className='playbuttonwidth' style={{ position: 'absolute', top: '5px', left: '-100px' }} onClick={toggleDarkMode} > {!isDarkMode ? <RiSunLine /> : <RiMoonLine />}</button> */}
+            <RiPlayFill />
+          </button>
+          <button
+            className="playbuttonwidth"
+            onClick={toggleDarkMode}
+            style={{ position: "absolute", top: "5px", left: "1075px" }}
+          >
+            {isDarkMode ? <RiSunLine /> : <RiMoonLine />}
+          </button>
+        </div>
+  
+
+        <div className="outputContainer">
+            
+            <div className="outputContent">
+                {output}
+            </div>
+        </div>
+       
+       
+      </div>
+    </>
+  );
+};
+
+export default Editor;

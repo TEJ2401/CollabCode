@@ -1,0 +1,176 @@
+const express = require('express');
+const app = express();
+const cors = require('cors');
+const http = require('http');
+const path = require('path');
+const {Server} = require('socket.io');
+const bodyParser = require('body-parser');  
+const ACTIONS = require('./src/actions/Actions');
+const mongoose = require('mongoose');
+const server = http.createServer(app);
+
+const io = new Server(server);
+app.use(express.json())
+app.use(bodyParser.json()); // Parse JSON request bodies
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({
+    origin: 'http://localhost:3000', // Allow requests from a specific origin
+    methods: ['GET', 'POST'],      // Allow specific HTTP methods
+    allowedHeaders: ['Content-Type'], // Allow specific headers
+    credentials: true              // Allow sending cookies and other credentials
+  }));
+app.use(express.static('public'));
+// app.use((req, res, next) => {
+//     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// });
+const roomSchema = new mongoose.Schema({
+    roomId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    // Add other fields as needed
+});
+
+// Create the Room model using the schema
+const Room = mongoose.model('Room', roomSchema);
+
+const userSocketMap = {};
+function getAllConnectedClients(roomId) {
+    // Map
+    return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
+        (socketId) => {
+            return {
+                socketId,
+                username: userSocketMap[socketId],
+            };
+        }
+    );
+}
+
+async function connectToDatabase() {
+    try {
+        await mongoose.connect('mongodb+srv://smitpadshala99:smitcollabcodehub@cluster0.ootkrdm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('Connected to MongoDB');
+    } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
+    }
+}
+
+connectToDatabase();
+console.log("hi")
+app.post('/create-room', async (req, res) => {
+    console.log("Hi");
+    try {
+        const { roomId } = req.body;
+        console.log(roomId)
+        // Check if the room already exists in the database
+        const existingRoom = await Room.findOne({ roomId });
+        if (existingRoom) {
+            return res.status(400).json({ message: 'Room already exists' });
+        }
+
+        // Create a new room document and save it to the database
+        const newRoom = new Room({ roomId });
+        await newRoom.save();
+
+        // Respond with success
+        res.status(201).json({ message: 'Room created successfully' });
+    } catch (error) {
+        console.error('Error creating room:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+app.post('/check-room', async (req, res) => {
+    try {
+        const { roomId } = req.body;
+
+        // Check if the room exists in the database
+        const room = await Room.findOne({ roomId });
+
+        if (room) {
+            res.status(200).json({ message: 'Room exists' });
+        } else {
+            res.status(404).json({ message: 'Room does not exist' });
+        }
+    } catch (error) {
+        console.error('Error checking room:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+io.on('connection', (socket) => {
+    console.log('socket connected', socket.id);
+    
+    socket.on("message", async ({ room, newMessage,username,currenttime }) => {
+        console.log(newMessage);
+        console.log(username)
+        io.emit("receive-message", {newMessage,username,currenttime});
+        console.log(newMessage)
+      });
+      socket.on("join-room", (room) => {
+        socket.join(room);
+        console.log(`User joined room ${room}`);
+      });
+      socket.on('outputChange', ({ output }) => {
+        console.log(output)
+        io.emit('outputChange', { output });
+    });
+    
+    socket.on("sync_emit",()=>{
+        
+        socket.broadcast.emit("syncmessages")
+    })
+    socket.on("outputsync",({Output})=>{
+        console.log(Output)
+        io.emit("op",{Output})
+    })
+    socket.on(ACTIONS.JOIN, ({roomId, username}) => {
+        userSocketMap[socket.id] = username;
+        socket.join(roomId);
+        const clients = getAllConnectedClients(roomId);
+        clients.forEach(({socketId}) => {
+            io.to(socketId).emit(ACTIONS.JOINED, {
+                clients,
+                username,
+                socketId: socket.id,
+            });
+        });
+    });
+
+    socket.on(ACTIONS.CODE_CHANGE, ({roomId, code}) => {
+        socket.in(roomId).emit(ACTIONS.CODE_CHANGE, {code});
+    });
+    socket.on("sync_chat",({chat})=>{
+        console.log(chat)
+        io.emit("sync_chat", { chat });
+    })
+    socket.on(ACTIONS.SYNC_CODE, ({socketId, code}) => {
+        io.to(socketId).emit(ACTIONS.CODE_CHANGE, {code});
+    });
+
+    socket.on('disconnecting', () => {
+        const rooms = [...socket.rooms];
+        rooms.forEach((roomId) => {
+            socket.in(roomId).emit(ACTIONS.DISCONNECTED, {
+                socketId: socket.id,
+                username: userSocketMap[socket.id],
+            });
+        });
+        delete userSocketMap[socket.id];
+        socket.leave();
+    });
+});
+
+// Serve response in production
+app.get('/', (req, res) => {
+    const htmlContent = '<h1>Welcome to the code editor server</h1>';
+    res.setHeader('Content-Type', 'text/html');
+    res.send(htmlContent);
+});
+
+const PORT = process.env.SERVER_PORT || 5000;
+server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
