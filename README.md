@@ -14,6 +14,7 @@ Are you tired of sending code snippets back and forth, struggling to debug and c
 - Copy button to copy the room id to clipboard
 - Leave button to leave the room
 - Joining & leaving of users is also reflected in real time
+-Chatbox feature to communicate with all joined users in the room
 
 ## Tech Stack
 
